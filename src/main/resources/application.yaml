@@ -1,0 +1,59 @@
+---
+basedir: /apps/cia
+
+spring:
+  application:
+    name: Customer Information API
+  #  datasource:
+  #    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  #    platform: sqlserver
+  #    hikari:
+  #      connection-timeout: 10000
+  #      maximum-pool-size: 50
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServer2012Dialect
+  jackson:
+    mapper:
+      ACCEPT_CASE_INSENSITIVE_PROPERTIES: true
+    default-property-inclusion: non_null
+
+# Server related configurations
+server:
+  ssl:
+    enabled-protocols: [TLSv1.2]
+    ciphers: [TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256]
+  port: 8443
+  tomcat:
+    basedir: ${basedir}/logs/tomcat/
+    threads:
+      max: 700
+    accesslog:
+      enabled: true
+      directory: ${basedir}/logs/
+      buffered: false
+      rename-on-rotate: true
+      max-days: 7
+      prefix: cpa-access
+      pattern: '%a %A %I %u %t "%r" %s %b'
+  error:
+    whitelabel:
+      enabled: false
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  health:
+    ldap:
+      enabled: false
+
+ldap:
+  url: ldaps://<ldap host>>:<ldap port>/
+  domain: <ldap domain>
+  rootDN: OU=Accounts,DC=int,DC=corp,DC=sun
+  customer-api-adgroup: <AD directory>
+  customer-delete-api-adgroup: <AD Group for delete>

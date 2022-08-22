@@ -1,0 +1,31 @@
+---
+# Spring related configuration
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+app:
+  datasource:
+    url: jdbc:sqlserver://<SQLSERVERHOST>:<port>;databaseName=<databaseName>;integratedSecurity=true;authenticationScheme=JavaKerberos;
+    continue-on-error: true
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    platform: sqlserver
+    connection-timeout: 10000
+    maximum-pool-size: 5
+    refresh-cron: 0 0 */6 * * *
+    cyberark:
+      appid: <App spaced id>
+      safe: <App spaced id>
+      query: <service account>
+      reason: <database authentication>
+
+# Application logging configuration
+logging:
+  file:
+    path: ${basedir}/logs/
+  level:
+    root: INFO
+    org.apache.http: INFO
+    org.springframework: WARN
+    io.swagger.client: INFO
